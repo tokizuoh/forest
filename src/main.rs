@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, fs::File, io::BufReader};
+use std::{collections::HashMap, env, fs::File, io::BufReader};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -31,7 +31,13 @@ pub struct Page {
 }
 
 fn main() {
-    let file_name = "tokizuoh-public.json";
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        eprintln!("Input file path.");
+        return;
+    }
+
+    let file_name = &args[1];
 
     let file = File::open(file_name).unwrap();
     let reader = BufReader::new(file);
