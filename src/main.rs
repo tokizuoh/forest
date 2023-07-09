@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use std::{fs::File, io::BufReader};
+use std::{collections::HashMap, fs::File, io::BufReader};
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -38,7 +38,13 @@ fn main() {
 
     let deserialized: Project = serde_json::from_reader(reader).unwrap();
 
+    // {id: Page}
+    let mut map = HashMap::new();
     for page in deserialized.pages {
-        println!("{}, {}", page.title, page.created);
+        map.insert(page.id.clone(), page.clone());
+    }
+
+    for m in map {
+        println!("{}", m.0);
     }
 }
