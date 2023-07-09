@@ -55,10 +55,13 @@ fn main() {
     for m in id_map {
         for line in m.1.lines {
             if line.starts_with("#") {
-                tag_map
-                    .entry(line)
-                    .or_insert(Vec::new())
-                    .push(m.1.id.to_string());
+                let tag_list = line.split(" ").collect::<Vec<&str>>();
+                for tag in tag_list {
+                    tag_map
+                        .entry(tag.to_string())
+                        .or_insert(Vec::new())
+                        .push(m.1.id.to_string());
+                }
             }
         }
     }
