@@ -63,9 +63,14 @@ fn main() {
         }
     }
 
+    let mut tags: Vec<(usize, String)> = Vec::new();
     for m in tag_map {
-        for v in m.1 {
-            println!("{}, {}", m.0, v);
-        }
+        tags.push((m.1.len(), m.0));
+    }
+
+    tags.sort_by(|a, b| b.0.cmp(&a.0));
+
+    for tag in tags {
+        println!("{}, {}", tag.1, tag.0);
     }
 }
