@@ -39,12 +39,27 @@ fn main() {
     let deserialized: Project = serde_json::from_reader(reader).unwrap();
 
     // {id: Page}
-    let mut map = HashMap::new();
+    let mut id_map = HashMap::new();
     for page in deserialized.pages {
-        map.insert(page.id.clone(), page.clone());
+        id_map.insert(page.id.clone(), page.clone());
     }
 
-    for m in map {
-        println!("{}", m.0);
+    // {tag: [id]}
+    let mut tag_map: HashMap<String, Vec<String>> = HashMap::new();
+    for m in id_map {
+        for line in m.1.lines {
+            if line.starts_with("#") {
+                tag_map
+                    .entry(line)
+                    .or_insert(Vec::new())
+                    .push(m.1.id.to_string());
+            }
+        }
+    }
+
+    for m in tag_map {
+        for v in m.1 {
+            println!("{}, {}", m.0, v);
+        }
     }
 }
